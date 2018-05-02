@@ -1,39 +1,55 @@
 import os
 from PIL import Image
 
-
 #Function to resize all images to size 256*256
-def resizeImage(imageFilePath,filename):
+def resizeImage(imageFilePath,filename,resizedImagePath):
     img=Image.open(imageFilePath)
     new_image=img.resize((256,256))
 
     filename=filename+"-resized.png"
 
-    resizedImagePath="/Users/anujatike/Documents/sem4/CS256/project/Data/resizedImages/"+filename
+    resizedImagePathNew=resizedImagePath+filename
 
-    new_image.save(resizedImagePath)
-
-
+    new_image.save(resizedImagePathNew)
 
 
 
-#Root path to search for "Images" folder in all image folders
-root='/Users/anujatike/Documents/sem4/CS256/project/Data/stage1_train'
+def main():
 
-#Searching image to resize in Images folder
-for dirpath, dirs, files in os.walk(root):
+    #Root path to search for "Images" folder in all image folders
+    root='/Users/anujatike/Documents/sem4/CS256/project/Data/stage1_train'
 
-    if "images" in dirpath:
+    #Searching image and mask to resize in images and masks folder respectively
+    for dirpath, dirs, files in os.walk(root):
 
-        for filename in files:
+        if "images" in dirpath:
 
-            #Path of image file to resize
-            imageFilePath=os.path.join(dirpath, filename)
+            for filename in files:
 
-            #Extracting only name and not extention from filename
-            onlyName = filename.split(".")
+                #Path of image file to resize
+                imageFilePath=os.path.join(dirpath, filename)
 
-            #Passing only image name wihout extension and imageFilePath to resize the image
-            resizeImage(imageFilePath,onlyName[0])
+                #Extracting only name and not extention from filename
+                onlyNameImage = filename.split(".")
+
+                #Passing only image name wihout extension, imageFilePath and resizedImagePath to resize the image
+                resizedImagePath = "/Users/anujatike/Documents/sem4/CS256/project/Data/resizedImages/"
+                resizeImage(imageFilePath,onlyNameImage[0],resizedImagePath)
+
+        if "masks" in dirpath:
+            for filename in files:
+
+                #Path of mask file to resize
+                maskFilePath=os.path.join(dirpath, filename)
+
+                #Extracting only name and not extention from filename
+                onlyNameMask = filename.split(".")
+
+                #Passing only mask name wihout extension,maskFilePath and resizedMaskPath to resize the mask
+                resizedMaskPath = "/Users/anujatike/Documents/sem4/CS256/project/Data/resizedMasks/"
+                resizeImage(maskFilePath,onlyNameMask[0],resizedMaskPath)
 
 
+
+if __name__=="__main__":
+    main()
